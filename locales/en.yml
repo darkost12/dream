@@ -1,0 +1,14 @@
+dream:
+  description: Generate an image
+  download: Download
+  failed: Generation failed
+  prompt: Image description
+  result: Generation result
+  silent: Display result only to you
+  style: Style ID
+styles:
+  description: Get list available styles
+  free: Free
+  header: ID   Name                    Access
+  premium: Premium
+  title: Styles

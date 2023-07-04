@@ -9,6 +9,7 @@ import {
   ButtonStyle,
   ComponentType,
   Locale,
+  Message
 } from 'discord.js'
 import { Discord, Slash, SlashOption, ButtonComponent } from 'discordx'
 import { Pulse } from '../types/pulse.js'
@@ -53,6 +54,20 @@ async function imageEmbed(
 const failEmbed = (locale: Locale): EmbedBuilder =>
   new EmbedBuilder().setTitle(t('dream.failed', locale))
 
+const handleDeletedMessage = async (promise: Promise<Message<boolean>>): Promise<Message<boolean>> => {
+  try {
+    return await promise
+  } catch (e: any) {
+    if (e.toString().includes('Unknown Message')) {
+      // Message was deleted, do nothing
+    } else {
+      throw e
+    }
+
+    return new Promise(_ => { })
+  }
+}
+
 const updateDisplayedMessage = async (
   pulse: Pulse,
   beSilent: boolean | undefined,
@@ -65,20 +80,24 @@ const updateDisplayedMessage = async (
       components: []
     })
   } else if (mbResult) {
-    const message = await interaction.editReply({
-      embeds: [await imageEmbed(mbResult, pulse.inputSpec.prompt, interaction.locale)],
-      components: [buttons(mbResult, true, interaction.locale)]
-    })
+    const message = await handleDeletedMessage(
+      interaction.editReply({
+        embeds: [await imageEmbed(mbResult, pulse.inputSpec.prompt, interaction.locale)],
+        components: [buttons(mbResult, true, interaction.locale)]
+      })
+    )
 
     try {
       const buttonInteraction = await message.awaitMessageComponent({
-        componentType: ComponentType.Button, time: 30000
+        componentType: ComponentType.Button, time: 60000
       })
 
-      await interaction.editReply({
-        embeds: [await imageEmbed(mbResult, pulse.inputSpec.prompt, interaction.locale)],
-        components: [buttons(mbResult, false, interaction.locale)]
-      })
+      await handleDeletedMessage(
+        interaction.editReply({
+          embeds: [await imageEmbed(mbResult, pulse.inputSpec.prompt, interaction.locale)],
+          components: [buttons(mbResult, false, interaction.locale)]
+        })
+      )
 
       if (!buttonInteraction.deferred) {
         if (beSilent) {
@@ -88,10 +107,12 @@ const updateDisplayedMessage = async (
         }
       }
 
-      await buttonInteraction.editReply({
-        embeds: [new EmbedBuilder().setTitle(t('dream.thinking', interaction.locale))],
-        components: []
-      })
+      await handleDeletedMessage(
+        buttonInteraction.editReply({
+          embeds: [new EmbedBuilder().setTitle(t('dream.thinking', interaction.locale))],
+          components: []
+        })
+      )
 
       await processOne(
         pulse.inputSpec.prompt,
@@ -101,10 +122,12 @@ const updateDisplayedMessage = async (
       )
     } catch (e: any) {
       if (e.toString().includes('Collector received no interactions before ending')) {
-        await interaction.editReply({
-          embeds: [await imageEmbed(mbResult, pulse.inputSpec.prompt, interaction.locale)],
-          components: [buttons(mbResult, false, interaction.locale)]
-        })
+        await handleDeletedMessage(
+          interaction.editReply({
+            embeds: [await imageEmbed(mbResult, pulse.inputSpec.prompt, interaction.locale)],
+            components: [buttons(mbResult, false, interaction.locale)]
+          })
+        )
       } else {
         throw e
       }

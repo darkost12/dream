@@ -3,9 +3,11 @@ dream:
   download: Download
   failed: Generation failed
   prompt: Image description
+  redo: Generate again
   result: Generation result
   silent: Display result only to you
   style: Style ID
+  thinking: Generating...
 styles:
   description: Get list available styles
   free: Free

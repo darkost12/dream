@@ -1,24 +1,27 @@
 import {
   ActionRowBuilder,
   ApplicationCommandOptionType,
-  CommandInteraction,
-  EmbedBuilder,
   ButtonBuilder,
   ButtonInteraction,
-  MessageActionRowComponentBuilder,
   ButtonStyle,
+  CommandInteraction,
   ComponentType,
+  EmbedBuilder,
   Locale,
-  Message
+  Message,
+  MessageActionRowComponentBuilder
 } from 'discord.js'
-import { Discord, Slash, SlashOption, ButtonComponent } from 'discordx'
+import { ButtonComponent, Discord, Slash, SlashOption } from 'discordx'
 import { Pulse } from '../types/pulse.js'
 import Dreamer from '../dreamer.js'
 import silent from '../utils/silent.js'
 import t from '../utils/t.js'
 
 const buttons = (
-  imageUrl: string, showRedoButton: boolean, locale: Locale) => {
+  imageUrl: string,
+  showRedoButton: boolean,
+  locale: Locale
+) => {
   const downloadButton = new ButtonBuilder()
     .setLabel(t('dream.download', locale))
     .setStyle(ButtonStyle.Link)
@@ -54,7 +57,9 @@ async function imageEmbed(
 const failEmbed = (locale: Locale): EmbedBuilder =>
   new EmbedBuilder().setTitle(t('dream.failed', locale))
 
-const handleDeletedMessage = async (promise: Promise<Message<boolean>>): Promise<Message<boolean>> => {
+const handleDeletedMessage = async (
+  promise: Promise<Message<boolean>>
+): Promise<Message<boolean>> => {
   try {
     return await promise
   } catch (e: any) {

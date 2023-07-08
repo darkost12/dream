@@ -13,6 +13,7 @@ import {
 } from 'discord.js'
 import { ButtonComponent, Discord, Slash, SlashOption } from 'discordx'
 import { Pulse } from '../types/pulse.js'
+import { Warning } from '../types/warning.js'
 import Dreamer from '../dreamer.js'
 import silent from '../utils/silent.js'
 import t from '../utils/t.js'
@@ -162,7 +163,14 @@ async function processOne(
       interimPulse => updateDisplayedMessage(interimPulse, beSilent, interaction)
     )
 
-  updateDisplayedMessage(finalPulse, beSilent, interaction)
+  if (finalPulse instanceof Warning) {
+    await interaction.editReply({
+      embeds: [failEmbed(interaction.locale)],
+      components: []
+    })
+  } else {
+    updateDisplayedMessage(finalPulse, beSilent, interaction)
+  }
 }
 
 @Discord()

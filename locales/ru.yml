@@ -10,7 +10,5 @@ dream:
   thinking: Генерация...
 styles:
   description: Получить список доступных стилей
-  free: Бесплатный
-  header: ID   Название                Доступ
-  premium: Премиум
+  header: ID    Название
   title: Стили

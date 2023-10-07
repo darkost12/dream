@@ -5,6 +5,5 @@ declare module 'dream-api' {
   import { Warning } from '../types/warning'
 
   function getStyles(): Promise<Array<StyleRaw>>
-  function signIn(login: string, password: string): Promise<Token>
   function generateImage(style: number, prompt: string, token: option<string>, _, _, _, _, callback: (pulse: PulseRaw) => void): Promise<PulseRaw | Warning>
 }

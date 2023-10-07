@@ -1,4 +1,4 @@
-import { getStyles, signIn, generateImage } from 'dream-api'
+import { getStyles, generateImage } from 'dream-api'
 import { Style, styleFromRaw } from './types/style.js'
 import { Pulse, PulseRaw, pulseFromRaw } from './types/pulse.js'
 import { Warning } from './types/warning.js'
@@ -7,10 +7,6 @@ async function listStyles(): Promise<Array<Style>> {
   const result = await getStyles()
 
   return result.map(styleFromRaw)
-}
-
-async function login(email: string, pass: string): Promise<string> {
-  return await signIn(email, pass)
 }
 
 type PulseCallback = (pulse: Pulse) => void
@@ -44,6 +40,6 @@ async function dream(style: number | undefined, prompt: string, token: string | 
   }
 }
 
-let Dream = { listStyles, login, dream }
+let Dream = { listStyles, dream }
 
 export default Dream

@@ -10,7 +10,5 @@ dream:
   thinking: Generating...
 styles:
   description: Get list available styles
-  free: Free
-  header: ID   Name                    Access
-  premium: Premium
+  header: ID    Name
   title: Styles

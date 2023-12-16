@@ -127,7 +127,10 @@ const updateDisplayedMessage = async (
         buttonInteraction
       )
     } catch (e: any) {
-      if (e.toString().includes('Collector received no interactions before ending')) {
+      const message = e.toString()
+      if (message.includes('Unknown interaction') || message.includes('already been acknowledged')) {
+        // Message was deleted or already replied
+      } else if (message.includes('Collector received no interactions before ending')) {
         await handleDeletedMessage(
           interaction.editReply({
             embeds: [await imageEmbed(mbResult, pulse.inputSpec.prompt, interaction.locale)],

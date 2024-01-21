@@ -141,7 +141,7 @@ const updateDisplayedMessage = async (
         throw e
       }
     }
-  } else {
+  } else if (pulse.photoUrlList) {
     const lastPreview = pulse.photoUrlList.at(-1)
 
     if (lastPreview) {
